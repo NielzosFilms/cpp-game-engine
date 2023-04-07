@@ -3,18 +3,8 @@
 #include <iostream>
 #include <string>
 
-void fatalError(std::string error) {
-    std::cout << error << std::endl;
-    std::cout << "Enter any key to quit..." << std::endl;
-    int tmp;
-    std::cin >> tmp;
-    SDL_Quit();
-}
-
-MainGame::MainGame() {
-    _window = nullptr;
-    _screenWidth = 600;
-    _screenHeight = 400;
+MainGame::MainGame()
+    : _window("Game engine", 1920, 1080) {
     _gameState = GameState::PLAY;
 }
 
@@ -24,33 +14,7 @@ void MainGame::run() {
 }
 
 void MainGame::initSystems() {
-    SDL_Init(SDL_INIT_EVERYTHING);
-
-    _window = SDL_CreateWindow("cpp-game-engine",
-                               SDL_WINDOWPOS_CENTERED,
-                               SDL_WINDOWPOS_CENTERED,
-                               _screenWidth,
-                               _screenHeight,
-                               SDL_WINDOW_OPENGL);
-    if (_window == nullptr) {
-        fatalError("SDL Window failed to create");
-    }
-
-    SDL_GLContext glContext = SDL_GL_CreateContext(_window);
-    if (glContext == nullptr) {
-        fatalError("SDL_GL context failed to create");
-    }
-
-    // Optional for wierd crashes
-    glewExperimental = true;
-    GLenum error = glewInit();
-    if (error != GLEW_OK) {
-        fatalError("Glew initialization failed");
-    }
-
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    _window.initWindowAndContexts();
 }
 
 void MainGame::gameLoop() {
@@ -95,5 +59,5 @@ void MainGame::draw() {
 
     glEnd();
 
-    SDL_GL_SwapWindow(_window);
+    SDL_GL_SwapWindow(_window.getWindow());
 }

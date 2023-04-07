@@ -3,6 +3,9 @@
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 
+#include "engine/Window.cpp"
+#include "engine/Window.h"
+
 enum class GameState { PLAY,
                        EXIT };
 
@@ -17,8 +20,6 @@ class MainGame {
     void draw();
 
    private:
-    SDL_Window* _window;
-    int _screenWidth;
-    int _screenHeight;
+    Window _window;
     GameState _gameState;
 };
